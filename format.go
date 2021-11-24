@@ -87,8 +87,6 @@ func LoadShowMetadata(dir string) (*ShowInfo, error) {
         return nil, err
     }
 
-    _, show := filepath.Split(dir)
-    output.Id = show
     return &output, nil
 }
 
@@ -107,7 +105,9 @@ func CollateMetadata(dir string) ([]GifInfo, []ShowInfo, error) {
                     return err
                 }
                 shows = append(shows, *show_info)
-                show_ptrs[show_info.Id] = show_info
+
+                _, base := filepath.Split(path)
+                show_ptrs[base] = show_info
             }
             return nil
         }
@@ -137,7 +137,8 @@ func CollateMetadata(dir string) ([]GifInfo, []ShowInfo, error) {
     }
 
     // Looping through and checking that each GIF has valid characters.
-    for _, x := range gifs {
+    // Also updating the show ID to use the actual ID, not our path.
+    for i, x := range gifs {
         curshow, found := show_ptrs[x.ShowId]
         if (!found) {
             return nil, nil, errors.New("did not find show-level metadata for '" + x.Id + "'")
@@ -149,6 +150,8 @@ func CollateMetadata(dir string) ([]GifInfo, []ShowInfo, error) {
                 return nil, nil, errors.New("did not find listing for '" + y + "' in '" + x.Id + "'")
             }
         }
+
+        gifs[i].ShowId = curshow.Id
     }
 
     return gifs, shows, nil
