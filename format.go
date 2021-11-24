@@ -14,7 +14,7 @@ import (
 // Definitions of structs and constants. 
 
 type GifInfo struct {
-    Id string `json:"id"`
+    Path string `json:"path"`
     ShowId string `json:"show_id"`
     Characters []string `json:"characters"`
     Sentiments []string `json:"sentiments"`
@@ -59,7 +59,7 @@ func LoadGifMetadata(path string) (*GifInfo, error) {
     }
     prefix := base[:len(base) - len(suffix)]
     gif_name := prefix + ".gif"
-    output.Id = show + "/" + gif_name // don't use filepath.Join, we're making URL components here.
+    output.Path = show + "/" + gif_name // don't use filepath.Join, we're making URL components here.
 
     parts[len(parts) - 1] = gif_name
     checkpath := filepath.Join(parts...)
@@ -141,13 +141,13 @@ func CollateMetadata(dir string) ([]GifInfo, []ShowInfo, error) {
     for i, x := range gifs {
         curshow, found := show_ptrs[x.ShowId]
         if (!found) {
-            return nil, nil, errors.New("did not find show-level metadata for '" + x.Id + "'")
+            return nil, nil, errors.New("did not find show-level metadata for '" + x.Path + "'")
         }
 
         for _, y := range x.Characters {
             _, found := curshow.Characters[y]
             if (!found) {
-                return nil, nil, errors.New("did not find listing for '" + y + "' in '" + x.Id + "'")
+                return nil, nil, errors.New("did not find listing for '" + y + "' in '" + x.Path + "'")
             }
         }
 
