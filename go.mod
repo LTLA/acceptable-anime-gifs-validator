@@ -1,3 +1,3 @@
-module github.com/LTLA/anime-gif-formatter
+module validator 
 
 go 1.16

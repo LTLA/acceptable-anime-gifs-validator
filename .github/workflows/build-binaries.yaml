@@ -16,5 +16,5 @@ jobs:
       if: github.ref == 'refs/heads/master'
       uses: actions/upload-artifact@v2
       with:
-        name: formatter
-        path: anime-gif-formatter
+        name: validator
+        path: validator
