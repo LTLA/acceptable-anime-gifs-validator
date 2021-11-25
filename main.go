@@ -96,6 +96,7 @@ func CollateMetadata(dir string) ([]GifInfo, []ShowInfo, error) {
         if (info.IsDir()) {
             show_info, err := LoadShowMetadata(dir, info.Name())
             if (err != nil) {
+                err = errors.New("failed to load metadata for '" + info.Name() + "':\n" + err.Error())
                 return nil, nil, err
             }
             shows = append(shows, *show_info)
@@ -112,7 +113,8 @@ func CollateMetadata(dir string) ([]GifInfo, []ShowInfo, error) {
 
                 gif_info, err := LoadGifMetadata(dir, info.Name(), subinfo.Name())
                 if (err != nil) {
-                    return nil, nil,err
+                    err = errors.New("failed to load metadata for '" + info.Name() + "/" + subinfo.Name() + "':\n" + err.Error())
+                    return nil, nil, err
                 }
 
                 // Updating the show ID to use the actual ID, not our path.
