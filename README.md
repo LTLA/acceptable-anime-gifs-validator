@@ -1,11 +1,12 @@
-# Check the acceptable anime GIF registry
+# Validate the acceptable anime GIF registry
 
 This repository contains code to validate the [acceptable anime GIF registry](https://github.com/LTLA/acceptable-anime-gifs). 
 It will also collate the GIF metadata into a single set of manifests for easy consumption by other projects.
-To use, simply download the prebuilt binaries (or run `go build .` yourself) and then run it on a directory containing the GIF registry:
+To use, simply download the [prebuilt binary](https://github.com/LTLA/acceptable-anime-gifs-validator/releases/tag/latest) 
+(or run `go build .` yourself) and then run it on a directory containing the GIF registry:
 
 ```sh
-./anime-gif-formatter -dir registry
+./validator -dir registry
 ```
 
 The registry should contain subdirectories for each show, which in turn contain the GIFs from that show.
