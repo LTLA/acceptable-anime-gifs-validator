@@ -18,12 +18,12 @@ type GifInfo struct {
     ShowId string `json:"show_id"`
     Characters []string `json:"characters"`
     Sentiments []string `json:"sentiments"`
-    Url string `json:"url"`
+    Url *string `json:"url"`
 }
 
 type ShowInfo struct {
-    Id string `json:"id"`
-    Name string `json:"name"`
+    Id *string `json:"id"`
+    Name *string `json:"name"`
     Characters map[string]string `json:"characters"`
 }
 
@@ -44,6 +44,16 @@ func LoadGifMetadata(dir, show, base string) (*GifInfo, error) {
     err = dec.Decode(&output)
     if (err != nil) {
         return nil, err
+    }
+
+    if (output.Characters == nil) {
+        return nil, errors.New("expected a 'characters' array in the metadata")
+    }
+    if (output.Sentiments == nil) {
+        return nil, errors.New("expected a 'sentiments' array in the metadata")
+    }
+    if (*output.Url == "") {
+        return nil, errors.New("expected a 'url' string in the metadata")
     }
 
     if (len(base) == len(suffix)) {
@@ -76,6 +86,16 @@ func LoadShowMetadata(dir, show string) (*ShowInfo, error) {
     err = dec.Decode(&output)
     if (err != nil) {
         return nil, err
+    }
+
+    if (output.Id == nil) {
+        return nil, errors.New("expected a 'id' string in the metadata")
+    }
+    if (output.Name == nil) {
+        return nil, errors.New("expected a 'name' string in the metadata")
+    }
+    if (output.Characters == nil) {
+        return nil, errors.New("expected a 'characters' map in the metadata")
     }
 
     return &output, nil
@@ -118,7 +138,7 @@ func CollateMetadata(dir string) ([]GifInfo, []ShowInfo, error) {
                 }
 
                 // Updating the show ID to use the actual ID, not our path.
-                gif_info.ShowId = show_info.Id
+                gif_info.ShowId = *show_info.Id
 
                 // Checking that each GIF has valid characters.
                 for _, y := range gif_info.Characters {
