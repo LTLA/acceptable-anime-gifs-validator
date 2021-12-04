@@ -52,7 +52,7 @@ func LoadGifMetadata(dir, show, base string) (*GifInfo, error) {
     if (output.Sentiments == nil) {
         return nil, errors.New("expected a 'sentiments' array in the metadata")
     }
-    if (*output.Url == "") {
+    if (output.Url == nil) {
         return nil, errors.New("expected a 'url' string in the metadata")
     }
 
